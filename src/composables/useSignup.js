@@ -2,8 +2,11 @@ import { ref } from "vue";
 import { projectAuth } from "../firebase/config";
 
 const error = ref(null);
+const isPending = ref(false);
+
 const signup = async (email, password, displayName) => {
     error.value = null;
+    isPending.value = true;
 
     try {
         const res = await projectAuth.createUserWithEmailAndPassword(email, password);
@@ -15,6 +18,7 @@ const signup = async (email, password, displayName) => {
         //update display name
 
         error.value = null;
+        isPending.value = false;
 
         // nếu ko có erorr thì sẽ null, null thì gọi {{ error }} ở view sẽ ko show lên
         // mà ko cần sử dụng v-if
@@ -23,9 +27,12 @@ const signup = async (email, password, displayName) => {
     } catch (err) {
         console.log(err.message);
         error.value = err.message;
+        isPending.value = false;
     }
 };
+
 const useSignup = () => {
-    return { error, signup };
+    return { error, signup, isPending };
 };
+
 export default useSignup;
