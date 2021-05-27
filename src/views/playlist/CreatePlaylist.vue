@@ -22,12 +22,14 @@ import useStorage from '@/composables/useStorage';
 import useCollection from '@/composables/useCollection';
 import getUser from '@/composables/getUser';
 import { timestamp } from '@/firebase/config';
+import { useRouter } from 'vue-router';
 
 export default {
     setup() {
         const { uploadImage, url, filePath } = useStorage();
         const { error, addDoc } = useCollection('playlists');
         const { user } = getUser();
+        const router = useRouter();
 
         const title = ref('');
         const description = ref('');
@@ -40,7 +42,7 @@ export default {
                 isPending.value = true;
                 await uploadImage(file.value);
                 console.log('image uploaded, url: ', url.value);
-                await addDoc({
+                const res = await addDoc({
                     title: title.value,
                     description: description.value,
                     userId: user.value.uid,
@@ -53,11 +55,12 @@ export default {
                 isPending.value = false;
                 if (!error.value) {
                     console.log('playlist added');
+                    router.push({ name: 'PlaylistDetails', params: { id: res.id } });
                 }
             }
         };
 
-        const types = ['image/png', 'image/jpeg'];
+        const types = ['image/png', 'image/jpeg', 'image/jpg'];
 
         const handleChange = (e) => {
             let selected = e.target.files[0];
@@ -68,7 +71,7 @@ export default {
                 fileError.value = null;
             } else {
                 file.value = null;
-                fileError.value = 'Plese select img (png or jpeg)';
+                fileError.value = 'Plese select img (png or jpeg or jpg)';
             }
         };
 

@@ -1,22 +1,25 @@
 <template>
     <div v-for="playlist in playlists" :key="playlist.id">
-        <div class="single">
-            <div class="thumbnail">
-                <img :src="playlist.coverUrl" />
+        <router-link :to="{ name: 'PlaylistDetails', params: { id: playlist.id } }">
+            <div class="single">
+                <div class="thumbnail">
+                    <img :src="playlist.coverUrl" />
+                </div>
+                <div class="info">
+                    <h3>{{ playlist.title }}</h3>
+                    <p>created by {{ playlist.userName }}</p>
+                </div>
+                <div class="song-number">
+                    <p>{{ playlist.songs.length }} songs</p>
+                </div>
             </div>
-            <div class="info">
-                <h3>{{ playlist.title }}</h3>
-                <p>created by {{ playlist.userName }}</p>
-            </div>
-            <div class="song-number">
-                <p>{{ playlist.songs.length }} songs</p>
-            </div>
-        </div>
+        </router-link>
     </div>
 </template>
 
 <script>
 export default {
+    // receive collection playlists
     props: ['playlists'],
 };
 </script>
@@ -43,8 +46,8 @@ export default {
     border-radius: 10px;
 }
 img {
-    max-width: 150%;
-    max-height: 150%;
+    max-width: 100%;
+    max-height: 100%;
     display: block;
 }
 .info {

@@ -1,5 +1,5 @@
-import { ref } from "vue";
-import { projectFirestore } from "../firebase/config";
+import { ref } from 'vue';
+import { projectFirestore } from '../firebase/config';
 
 // declare the connection & refs inside the function
 // because the collection state is not global (like a user)
@@ -13,11 +13,13 @@ const useCollection = (collection) => {
         error.value = null;
         isPending.value = true;
         try {
-            await projectFirestore.collection(collection).add(doc);
+            const res = await projectFirestore.collection(collection).add(doc);
             isPending.value = false;
+            return res;
+            // res lấy id của uid doc
         } catch (err) {
             console.log(err.message);
-            error.value = "could not send the message";
+            error.value = 'could not send the message';
             isPending.value = false;
         }
     };
