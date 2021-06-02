@@ -1,12 +1,18 @@
 import { ref } from "vue";
 import { projectFirestore } from "../firebase/config";
 
-const getCollection = (collection) => {
+const getCollection = (collection , query) => {
     const documents = ref(null);
     const error = ref(null);
 
     // register the firestore collection reference
     let collectionRef = projectFirestore.collection(collection).orderBy("createdAt");
+
+    if(query){
+        collectionRef = collectionRef.where(...query)
+        // where firebase 3 ele but where we use is array
+        // using spread to separate args 
+    }
 
     // const unsub =
     collectionRef.onSnapshot(
