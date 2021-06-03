@@ -10,11 +10,14 @@
 <script>
 import getCollection from '../composables/getCollection';
 import ListView from '../components/ListView.vue';
+import { ref } from 'vue';
 export default {
     name: 'Home',
     components: { ListView },
     setup() {
         const { error, documents } = getCollection('playlists');
+
+        // const { documents } = getCollection('playlists', ['title', '==', searchTitle.value]);
 
         return { error, documents };
     },
